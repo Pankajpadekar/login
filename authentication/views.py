@@ -4,6 +4,13 @@ from django.http import HttpResponse
 # Create your views here.
 
 def home(request):
-    return HttpResponse("Hello I am working")
+    return HttpResponse(request, "authentication/index.html")
 
-def signup()
+def signup(request):
+    return render(request, "authentication/signup.html")
+
+def signin(request):
+    return render(request, "authentication/signuin.html")
+
+def signout(request):
+    pass
