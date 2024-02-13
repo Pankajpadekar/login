@@ -1,16 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
 
 # Create your views here.
 
 def home(request):
-    return HttpResponse(request, "authentication/index.html")
+    template = loader.get_template("index.html")
+    return render(request, "index.html")
 
 def signup(request):
-    return render(request, "authentication/signup.html")
+    return render(request, "signup.html")
 
 def signin(request):
-    return render(request, "authentication/signuin.html")
+    return render(request, "signuin.html")
 
 def signout(request):
     pass
