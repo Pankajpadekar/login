@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
@@ -24,12 +25,13 @@ def signup(request):
         password2 = request.POST['password2']
 
         myuser = User.objects.create_user(username, email, password)
-        myuser.first_name  = fname
-        myuser.last_name =  lname
+        myuser.first_name = fname
+        myuser.last_name = lname
 
         myuser.save()
 
-        messages.success(request, "Your account have been successfully created.")
+        messages.success(
+            request, "Your account have been successfully created.")
 
         return redirect('signin')
 
@@ -37,8 +39,25 @@ def signup(request):
 
 
 def signin(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            fname = user.first_name
+            return render(request, "index.html", {'fname': fname})
+
+        else:
+            messages.error(request, "Please correct username or Password.")
+            return redirect('signin')
+
     return render(request, "signin.html")
 
 
 def signout(request):
-    pass
+    logout(request)
+    messages.success(request,"Logged Out Successfully")
+    return redirect('home')
